@@ -42,7 +42,25 @@ void debugShader(GLuint vertexShader, GLuint fragmentShader, GLuint shaderProgra
 }
 
 GLuint loadShader(const char *vertexfilename, const char *fragmentfilename) {
-  GLuint program = 0, vertex_shader_id = 0, fragment_shader_id = 0;
+  GLuint program = glCreateProgram();
+  
+  GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+  
+  string s_vertex = getTextFile(vertexfilename);
+  const char* s_ver = s_vertex.c_str();
+  glShaderSource(vertex_shader_id, 1, &s_ver, NULL);
+  
+  glCompileShader(vertex_shader_id);
+  glAttachShader(program, vertex_shader_id);
+  
+  GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+  string s_fragment = getTextFile(fragmentfilename);
+  const char* s_frag = s_fragment.c_str();
+  glShaderSource(fragment_shader_id, 1, &s_frag, NULL);
+  glCompileShader(fragment_shader_id);
+  glAttachShader(program, fragment_shader_id);
+  
+  glLinkProgram(program);
 
   // TODO: Functions you should know to implement this
   // glCreateShader
